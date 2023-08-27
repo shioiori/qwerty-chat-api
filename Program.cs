@@ -37,6 +37,7 @@ builder.Services.AddScoped<IUser, UsersService>();
 builder.Services.AddScoped<IMessage, MessagesService>();
 builder.Services.AddScoped<IChat, ChatsService>();
 
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

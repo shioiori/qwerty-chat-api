@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using qwerty_chat_api.DTOs;
 using qwerty_chat_api.Models;
 using qwerty_chat_api.Services.Interface;
@@ -9,7 +10,7 @@ using System.Security.Claims;
 
 namespace qwerty_chat_api.Hubs
 {
-    public class ChatHub : Hub
+    public class ChatHub : Hub, IDisposable
     {
         // check user on off
         private static Dictionary<string, string> userStateConnections;
@@ -38,9 +39,17 @@ namespace qwerty_chat_api.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public void AddUserToNetwork(string user_id)
+        public async Task OnConnectedNetwork(string user_id)
         {
-            userStateConnections.Add(user_id, this.Context.ConnectionId);
+            if (!userStateConnections.ContainsKey(user_id))
+            {
+                userStateConnections.Add(user_id, this.Context.ConnectionId);
+            }
+            else
+            {
+                userStateConnections[user_id] = this.Context.ConnectionId;
+            }
+            await Clients.Client(this.Context.ConnectionId).SendAsync("OnConnected", this.Context.ConnectionId);
         }
 
         public async Task SendAll(string message)
@@ -55,46 +64,62 @@ namespace qwerty_chat_api.Hubs
 
         public async Task SendGroup(MessageRequest request)
         {
-            var message = new Message();
-            if (request.IsFile)
+            try
             {
-                message = new Message()
+                var message = new Message();
+                if (request.IsFile)
                 {
-                    ChatId = request.ChatId,
-                    File = request.Context,
-                    CreatedDate = DateTime.UtcNow,
-                    UserId = request.SenderId,
-                };
+                    message = new Message()
+                    {
+                        ChatId = request.ChatId,
+                        File = request.Context,
+                        CreatedDate = DateTime.UtcNow,
+                        UserId = request.SenderId,
+                        User = await _userService.GetAsync(request.SenderId),
+                        Chat = await _chatService.GetAsync(request.ChatId),
+                    };
+                }
+                else
+                {
+                    message = new Message()
+                    {
+                        ChatId = request.ChatId,
+                        Text = request.Context,
+                        CreatedDate = DateTime.UtcNow,
+                        UserId = request.SenderId,
+                        User = await _userService.GetAsync(request.SenderId),
+                        Chat = await _chatService.GetAsync(request.ChatId),
+                    };
+                }
+                _messageService.CreateAsync(message);
+                foreach (var item in request.ReceiverIds)
+                {
+                    if (userStateConnections.ContainsKey(item))
+                    {
+                        Groups.AddToGroupAsync(userStateConnections[item], request.GroupName);
+                    }
+                }
+                await Clients.Group(request.GroupName).SendAsync("ReceiveMessage", JsonConvert.SerializeObject(message, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }));
             }
-            else
+            catch (Exception ex)
             {
-                message = new Message()
-                {
-                    ChatId = request.ChatId,
-                    Text = request.Context,
-                    CreatedDate = DateTime.UtcNow,
-                    UserId = request.SenderId,
-                };
+                await Clients.Group(request.GroupName).SendAsync("ReceiveMessage", "Error");
             }
-            _messageService.CreateAsync(message);
-            Groups.AddToGroupAsync(userStateConnections[request.SenderId], request.GroupName);
-            Groups.AddToGroupAsync(userStateConnections[request.ReceiverId], request.GroupName);
-            var response = new MessageResponse() {
-                Message = request.Context,
-            };
-            await Clients.Group(request.GroupName).SendAsync("ReceiveMessage", JsonConvert.SerializeObject(response));
         }
 
         public async Task AddToGroup(string groupName, string userId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            await Groups.AddToGroupAsync(this.Context.ConnectionId, groupName);
             var user = await _userService.GetAsync(userId);
             await Clients.Group(groupName).SendAsync("AddToGroup", $"{user.Username} has joined the group {groupName}");
         }
 
         public async Task RemoveFromGroup(string groupName, string userId)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+            await Groups.RemoveFromGroupAsync(this.Context.ConnectionId, groupName);
             var user = await _userService.GetAsync(userId);
             await Clients.Group(groupName).SendAsync("RemoveFromGroup", $"{user.Username} has left the group {groupName}");
         }

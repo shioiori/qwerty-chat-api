@@ -25,7 +25,7 @@ namespace qwerty_chat_api.Models
         [BsonElement("chat_id")]
         [BsonRepresentation(BsonType.ObjectId)]
         public string ChatId { get; set; }
-        public MongoDBRef? User { get; set; }
-        public MongoDBRef? Chat { get; set; }
+        public User User { get; set; }
+        public Chat Chat { get; set; }
     }
 }

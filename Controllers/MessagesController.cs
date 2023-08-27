@@ -36,7 +36,6 @@ namespace qwerty_chat_api.Controllers
                 Text = message,
                 CreatedDate = DateTime.UtcNow,
                 UserId = id,
-                User = new MongoDB.Driver.MongoDBRef("Users", id)
             };
             await _messageService.CreateAsync(mess);
             return mess;
