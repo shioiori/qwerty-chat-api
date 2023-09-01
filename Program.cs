@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using qwerty_chat_api.Hubs;
-using qwerty_chat_api.Models;
-using qwerty_chat_api.Repositories;
-using qwerty_chat_api.Repositories.Interface;
-using qwerty_chat_api.Services;
-using qwerty_chat_api.Services.Interface;
+using qwerty_chat_api.Domain.Hubs;
+using qwerty_chat_api.Domain.Services;
+using qwerty_chat_api.Domain.Services.Interface;
+using qwerty_chat_api.Infrastructure.Models;
+using qwerty_chat_api.Infrastructure.Repositories;
+using qwerty_chat_api.Infrastructure.Repositories.Interface;
 using System.Text;
 
 
