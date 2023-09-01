@@ -6,11 +6,8 @@ using MongoDB.Driver;
 
 namespace qwerty_chat_api.Models
 {
-    public class Message
+    public class Message : BaseEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
         [BsonElement("text")]
         public string? Text { get; set; } = String.Empty;
         [BsonElement("file")]

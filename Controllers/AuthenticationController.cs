@@ -62,7 +62,10 @@ namespace qwerty_chat_api.Controllers
                     });
                 }
                 await _usersService.CreateAsync(_mapper.Map<RegisterRequest, User>(logRequest));
-                return Ok();
+                return Ok(new LogResponse()
+                {
+                    Success = true,
+                });
             }
             catch (Exception ex)
             {

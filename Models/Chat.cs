@@ -7,11 +7,8 @@ using MongoDB.Driver;
 
 namespace qwerty_chat_api.Models
 {
-    public class Chat
+    public class Chat : BaseEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
         [BsonElement("name")]
         public string? Name { get; set; }
         [BsonElement("created_date")]
@@ -26,6 +23,9 @@ namespace qwerty_chat_api.Models
         public bool? IsStored { get; set; } = false;
         [BsonElement("is_limited")]
         public bool? IsLimited { get; set; } = true;
+
+        [BsonElement("avatar")]
+        public string Avatar { get; set; } = "https://i.imgur.com/su4KGCT.png";
         [BsonElement("member_ids")]
         public IEnumerable<string> MemberIds { get; set; }
         [BsonElement("message_ids")]

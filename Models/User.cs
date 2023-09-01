@@ -6,11 +6,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace qwerty_chat_api.Models
 {
-    public class User
+    public class User : BaseEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
         [BsonElement("username")]
         public string Username { get; set; }
         [BsonElement("password")]

@@ -2,15 +2,16 @@
 using MongoDB.Driver;
 using qwerty_chat_api.Models;
 using qwerty_chat_api.Repositories.Interface;
+using qwerty_T_api.Repositories;
 
 namespace qwerty_chat_api.Repositories
 {
-    public class ChatRepository : IChatRepository
+    public class ChatRepository : BaseRepository<Chat>, IChatRepository
     {
         private readonly IMongoCollection<Chat> _ChatsCollection;
 
         public ChatRepository(
-            IOptions<ChatDatabaseSettings> ChatDatabaseSettings)
+            IOptions<ChatDatabaseSettings> ChatDatabaseSettings) : base(ChatDatabaseSettings)
         {
             var mongoClient = new MongoClient(
                 ChatDatabaseSettings.Value.ConnectionString);
@@ -21,22 +22,6 @@ namespace qwerty_chat_api.Repositories
             _ChatsCollection = mongoDatabase.GetCollection<Chat>(
                 ChatDatabaseSettings.Value.ChatsCollectionName);
         }
-
-        public async Task<Chat> GetAsync(string id) =>
-            await _ChatsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
-
-        public async Task<List<Chat>> GetAllAsync() =>
-            await _ChatsCollection.Find(_ => true).ToListAsync();
-
-        
-        public async Task CreateAsync(Chat newChat) =>
-            await _ChatsCollection.InsertOneAsync(newChat);
-
-        public async Task UpdateAsync(string id, Chat updatedChat) =>
-            await _ChatsCollection.ReplaceOneAsync(x => x.Id == id, updatedChat);
-
-        public async Task RemoveAsync(string id) =>
-            await _ChatsCollection.DeleteOneAsync(x => x.Id == id);
 
         public async Task<List<Chat>> GetUserChatAsync(string user_id)
         {

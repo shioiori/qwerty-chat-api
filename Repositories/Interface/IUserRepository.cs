@@ -7,6 +7,6 @@ namespace qwerty_chat_api.Repositories.Interface
         Task<User> GetUserAuthenticatedAsync(string username, string password);
         Task<User> GetUserByEmailAsync(string email);
         Task<User> GetUserByUsernameAsync(string username);
-        Task<List<User>> GetUserByPhoneOrEmail(string search_value);
+        Task<List<User>> GetUserByPhoneOrEmail(string? search_value);
     }
 }

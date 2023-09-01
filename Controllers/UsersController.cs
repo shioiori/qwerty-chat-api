@@ -21,7 +21,7 @@ namespace qwerty_chat_api.Controllers
         
         [HttpGet]
         [Route("search")]
-        public async Task<List<User>> GetSearchConnection(string search_value)
+        public async Task<List<User>> GetSearchConnection(string? search_value)
         {
             return await _usersService.GetUserByPhoneOrEmail(search_value);
         }
