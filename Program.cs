@@ -25,10 +25,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.Configure<ChatDatabaseSettings>(builder.Configuration.GetSection("QwertyChatDB"));
-builder.Services.AddSingleton<ChatRepository>();
-builder.Services.AddSingleton<MessageRepository>();
-builder.Services.AddSingleton<UserRepository>();
-
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

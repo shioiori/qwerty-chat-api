@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using qwerty_chat_api.Domain.Services.Interface;
 using qwerty_chat_api.Infrastructure.Models;
-using qwerty_chat_api.Services;
 
 namespace qwerty_chat_api.Application.Controllers
 {

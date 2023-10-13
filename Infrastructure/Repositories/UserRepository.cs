@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using qwerty_chat_api.Domain.Utils;
 using qwerty_chat_api.Infrastructure.Models;
 using qwerty_chat_api.Infrastructure.Repositories.Interface;
 
@@ -18,8 +19,7 @@ namespace qwerty_chat_api.Infrastructure.Repositories
             var mongoDatabase = mongoClient.GetDatabase(
                 ChatDatabaseSettings.Value.DatabaseName);
 
-            _UsersCollection = mongoDatabase.GetCollection<User>(
-                ChatDatabaseSettings.Value.UsersCollectionName);
+            _UsersCollection = mongoDatabase.GetCollection<User>(CollectionUtils<User>.GetCollectionName());
         }
         public async Task<User> GetUserAuthenticatedAsync(string username, string password)
         {

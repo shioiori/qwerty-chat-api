@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using AutoMapper.Execution;
 using MongoDB.Driver;
+using qwerty_chat_api.Domain.Attributes;
 
 namespace qwerty_chat_api.Infrastructure.Models
 {
+    [BsonCollection("Chats")]
     public class Chat : BaseEntity
     {
         [BsonElement("name")]

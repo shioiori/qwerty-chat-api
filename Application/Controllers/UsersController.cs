@@ -27,10 +27,18 @@ namespace qwerty_chat_api.Application.Controllers
         }
 
         [HttpGet]
-        public async Task<User> GetUser(string? id)
+        [Route("get-user-by-id")]
+        public async Task<User> GetUser(string id)
         {
-            id = id == null ? id : User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            id = string.IsNullOrEmpty(id) ? id : User.FindFirst(ClaimTypes.NameIdentifier).Value;
             return await _usersService.GetAsync(id);
+        }
+
+        [HttpGet]
+        [Route("get-all")]
+        public async Task<List<User>> GetAllUsers()
+        {
+            return await _usersService.GetAllAsync();
         }
     }
 }

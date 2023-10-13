@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using qwerty_chat_api.Application.DTOs;
 using qwerty_chat_api.Domain.Services.Interface;
-using qwerty_chat_api.Models;
+using qwerty_chat_api.Infrastructure.Models;
 using System.Data;
 using System.Security.Claims;
 

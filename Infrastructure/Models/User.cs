@@ -1,11 +1,13 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using qwerty_chat_api.Domain.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace qwerty_chat_api.Infrastructure.Models
 {
+    [BsonCollection("Users")]
     public class User : BaseEntity
     {
         [BsonElement("username")]

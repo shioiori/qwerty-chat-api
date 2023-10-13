@@ -3,9 +3,11 @@ using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MongoDB.Driver;
+using qwerty_chat_api.Domain.Attributes;
 
 namespace qwerty_chat_api.Infrastructure.Models
 {
+    [BsonCollection("Messages")]
     public class Message : BaseEntity
     {
         [BsonElement("text")]

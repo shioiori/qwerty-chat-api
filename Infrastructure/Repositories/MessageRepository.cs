@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using qwerty_chat_api.Domain.Utils;
 using qwerty_chat_api.Infrastructure.Models;
 using qwerty_chat_api.Infrastructure.Repositories.Interface;
 
@@ -18,8 +19,7 @@ namespace qwerty_chat_api.Infrastructure.Repositories
             var mongoDatabase = mongoClient.GetDatabase(
                 ChatDatabaseSettings.Value.DatabaseName);
 
-            _MessagesCollection = mongoDatabase.GetCollection<Message>(
-                ChatDatabaseSettings.Value.MessagesCollectionName);
+            _MessagesCollection = mongoDatabase.GetCollection<Message>(CollectionUtils<Message>.GetCollectionName());
         }
 
         public async Task<List<Message>> GetAllMessagesByChat(string chat_id)

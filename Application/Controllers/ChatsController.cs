@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using qwerty_chat_api.Domain.Services.Interface;
 using qwerty_chat_api.Infrastructure.Models;
-using qwerty_chat_api.Services;
 using System.Security.Claims;
 
 namespace qwerty_chat_api.Application.Controllers
