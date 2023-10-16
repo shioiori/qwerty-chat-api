@@ -9,7 +9,7 @@ namespace qwerty_chat_api.Infrastructure.Repositories
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
 
-        private readonly IMongoCollection<T> _TCollection;
+        protected readonly IMongoCollection<T> _TCollection;
         public BaseRepository(
             IOptions<ChatDatabaseSettings> ChatDatabaseSettings)
         {

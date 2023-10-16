@@ -8,28 +8,19 @@ namespace qwerty_chat_api.Infrastructure.Repositories
 {
     public class ChatRepository : BaseRepository<Chat>, IChatRepository
     {
-        private readonly IMongoCollection<Chat> _ChatsCollection;
-
         public ChatRepository(
             IOptions<ChatDatabaseSettings> ChatDatabaseSettings) : base(ChatDatabaseSettings)
         {
-            var mongoClient = new MongoClient(
-                ChatDatabaseSettings.Value.ConnectionString);
-
-            var mongoDatabase = mongoClient.GetDatabase(
-                ChatDatabaseSettings.Value.DatabaseName);
-
-            _ChatsCollection = mongoDatabase.GetCollection<Chat>(CollectionUtils<Chat>.GetCollectionName());
         }
 
         public async Task<List<Chat>> GetUserChatAsync(string user_id)
         {
-            return await _ChatsCollection.Find(x => x.MemberIds.Contains(user_id)).ToListAsync();
+            return await _TCollection.Find(x => x.MemberIds.Contains(user_id)).ToListAsync();
         }
 
         public async Task<Chat> GetChatByInfoAsync(string[] members, bool isLimited)
         {
-            return await _ChatsCollection.Find(x => x.IsLimited == isLimited && x.MemberIds == members).FirstOrDefaultAsync();
+            return await _TCollection.Find(x => x.IsLimited == isLimited && x.MemberIds == members).FirstOrDefaultAsync();
         }
     }
 }
